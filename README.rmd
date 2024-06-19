@@ -1,12 +1,13 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
+title: "Fama-French Factor Loadings"
+output: github_document
 ---
 
 # Purpose
 
-Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](../code/calcFactorLoadings.R) , while the README serves as a usage guide.
+Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](code/calcFactorLoadings.R) , while the README serves as an explanation and usage guide. 
+
+This is not a guide on calculating the Fama-French factors themselves. That can be found [here](https://stablebread.com/how-to-calculate-and-interpret-the-fama-and-french-and-carhart-multifactor-models/). Be warned, this is a very data intensive process and will likely require access to a paid data platform, like the Bloomberg terminal.
 
 ```{r, include=FALSE}
 
@@ -48,26 +49,35 @@ As can be seen above, fund returns (`main_df`) should be in long format. It requ
 
 # How are factor loadings calculated
 
-Factor loadings are calculated based on a 36-month rolling regression given by the equation: 
+Factor loadings are calculated based on a 36-month rolling regression given by the equation:
 
 $$
 R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
-$$ 
-where: 
-- $R_{it}$ is the return of the portfolio or asset $i$ at time $t$, 
-- $R_{ft}$ is the risk-free rate at time $t$, 
-- $R_{Mt}$ is the return of the market portfolio at time $t$, 
-- $\alpha_i$ is the intercept (alpha) for asset $i$, 
-- $\beta_{iM}$ is the sensitivity of the asset's returns to the market risk premium (market beta), 
-- $\beta_{iSMB}$ is the sensitivity of the asset's returns to the size factor (Small Minus Big), 
-- $\beta_{iHML}$ is the sensitivity of the asset's returns to the value factor (High Minus Low), 
-- $\beta_{iRMW}$ is the sensitivity of the asset's returns to the profitability factor (Robust Minus Weak), 
-- $\beta_{iCMA}$ is the sensitivity of the asset's returns to the investment factor (Conservative Minus Aggressive), 
-- $\epsilon_{it}$ is the error term for asset $i$ at time $t$.
+$$
+
+where:
+
+-   $R_{it}$ is the return of the portfolio or asset $i$ at time $t$,
+-   $R_{ft}$ is the risk-free rate at time $t$,
+-   $R_{Mt}$ is the return of the market portfolio at time $t$,
+-   $\alpha_i$ is the intercept (alpha) for asset $i$,
+-   $\beta_{iM}$ is the sensitivity of the asset's returns to the market risk premium (market beta),
+-   $\beta_{iSMB}$ is the sensitivity of the asset's returns to the size factor (Small Minus Big),
+-   $\beta_{iHML}$ is the sensitivity of the asset's returns to the value factor (High Minus Low),
+-   $\beta_{iRMW}$ is the sensitivity of the asset's returns to the profitability factor (Robust Minus Weak),
+-   $\beta_{iCMA}$ is the sensitivity of the asset's returns to the investment factor (Conservative Minus Aggressive),
+-   $\epsilon_{it}$ is the error term for asset $i$ at time $t$.
+
+In more practical terms this means the following: Lets say you have returns data for a particular fund for 100 periods. You then regress the first 36 periods ($t = 1$ to $t = 36$) of returns onto the first 36 periods of factors. The $\alpha$ and $\beta$'s, as well as their standard errors, are the factor loadings for $t=36$ and is then stored. Next, you increment one period, now considering $t = 2$ to $t = 37$, and the regression is repeated, creating the factor loadings for $t=37$. This process is repeated until you get the factor loadings up until $t=100$. You have successfully created factor loadings with standard errors for **ONE** fund.
+
+This entire process is now repeated for every fund you have data for. What you are left with is a data frame with the factor loadings for any given fund, for any given month.
 
 # Running the function
 
+The first step is to apply the `calcFactorLoadings()` function to all unique funds in the data. Each run of the function produces a dataframe of factor loadings for a particular fund. All these dataframes are then stored in a list.
+
 ```{r}
+# Get all the funds in the data
 funds <- unique(main_df$Fund)
 
 # Apply calcFactorLoadings to all funds in main dataframe
@@ -78,8 +88,14 @@ results_list <- lapply(funds, function(name) {
 
 ```
 
+Next all these dataframes are binded together.
+
 ```{r}
 # Combine all dataframes in the list into one big dataframe
 factor_loadings <- do.call(rbind, results_list) %>% 
     select(Date, Fund, c(1:(ncol(.)-2)))
+
+kable(head(factor_loadings))
 ```
+
+And there you have it. A dataframe with factor loadings for all funds in the data. Happy modelling.
