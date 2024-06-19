@@ -6,12 +6,7 @@ output:
 
 # Purpose
 
-Purpose of this work folder.
-
-Ideally store a minimum working example data set in data folder.
-
-Add binary files in bin, and closed R functions in code. Human Readable settings files (e.g. csv) should be placed in settings/
-
+Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](../code/calcFactorLoadings.R) , while the README serves as a usage guide.
 
 ```{r, echo=FALSE}
 
@@ -20,10 +15,14 @@ gc() # garbage collection
 library(tidyverse)
 library(readxl)
 library(zoo)
+library(kableExtra)
 
 list.files('code/', full.names = T, recursive = T) %>% .[grepl('.R', .)] %>% as.list() %>% walk(~source(.))
 ```
 
+# Data
+
+In this example I work with US data. The actual Fama-French factors for the US is freely available [here](https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html). Two dataframes are required for the calculation that will follow. The Fama-French factors and the historical returns of funds that you wish to calculate loadings for. Where you get fund returns is up to you. The data loading can be seen below.
 
 ```{r}
 # Load data
@@ -35,16 +34,21 @@ benchmark_vec <- c("Benchmark 1: S&P 500 TR USD",
 
 main_df <- read.csv("data/main_df.csv") %>%
     select(-1) %>% 
-    filter(!Fund %in% benchmark_vec) %>% 
+    filter(!Fund %in% benchmark_vec) %>% #Filter out garbage columns
     select(Date, Fund, Returns)
 
 FF_factors <- read_excel("data/FF5.xlsx") %>%
     mutate(Date = as.Date(Date))
 
-head(main_df)
-head(FF_factors)
+kable(head(main_df), caption = "Fund Returns")
+kable(head(FF_factors), caption = "FF5 factors")
 ```
 
+As can be seen above, fund returns (`main_df`) should be in long format. It requires three columns, namely Date, Fund, Returns. It can have additional columns, since the function will deal with this automatically. The factors (`FF_factors`), require a Date column in the same format as the fund_returns, and then a column for each factor in the analysis. **Note:** The column names are hard-coded into the function. If you have a different naming convention / different factors, you will have to alter them in the function itself.
+
+# How are factor loadings calculated
+
+# Running the function
 
 ```{r}
 funds <- unique(main_df$Fund)
@@ -55,12 +59,10 @@ results_list <- lapply(funds, function(name) {
     calcFactorLoadings(main_df, name)
 })
 
-
 ```
 
 ```{r}
 # Combine all dataframes in the list into one big dataframe
-big_dataframe <- do.call(rbind, results_list) %>% 
+factor_loadings <- do.call(rbind, results_list) %>% 
     select(Date, Fund, c(1:(ncol(.)-2)))
 ```
-

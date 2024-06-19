@@ -22,7 +22,7 @@ calcFactorLoadings <- function(df, fund){
         rollapply(data,
                   width = window,
                   FUN = function(x) {
-                      model <- lm(ret_min_rf ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = as.data.frame(x))
+                      model <- lm(ret_min_rf ~ `Mkt-RF` + SMB + HML + RMW + CMA, data = as.data.frame(x)) #Factors we are evaluating
                       betas <- coefficients(model)
                       std_errors <- coef(summary(model))[, "Std. Error"]
                       names(std_errors) <- paste0(names(std_errors), "_se")
