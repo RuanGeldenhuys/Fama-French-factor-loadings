@@ -13,12 +13,54 @@ Ideally store a minimum working example data set in data folder.
 Add binary files in bin, and closed R functions in code. Human Readable settings files (e.g. csv) should be placed in settings/
 
 
-```{r}
+```{r, echo=FALSE}
 
-rm(list = ls()) # Clean your environment:
-gc() # garbage collection - It can be useful to call gc after a large object has been removed, as this may prompt R to return memory to the operating system.
+rm(list = ls()) # Clean your environment
+gc() # garbage collection 
 library(tidyverse)
+library(readxl)
+library(zoo)
+
 list.files('code/', full.names = T, recursive = T) %>% .[grepl('.R', .)] %>% as.list() %>% walk(~source(.))
 ```
 
+
+```{r}
+# Load data
+benchmark_vec <- c("Benchmark 1: S&P 500 TR USD",
+                      "Benchmark 2: MSCI EAFE PR USD",
+                      "Peer Group: Display Group",
+                      "Number of investments ranked",
+                      "Median")
+
+main_df <- read.csv("data/main_df.csv") %>%
+    select(-1) %>% 
+    filter(!Fund %in% benchmark_vec) %>% 
+    select(Date, Fund, Returns)
+
+FF_factors <- read_excel("data/FF5.xlsx") %>%
+    mutate(Date = as.Date(Date))
+
+head(main_df)
+head(FF_factors)
+```
+
+
+```{r}
+funds <- unique(main_df$Fund)
+
+# Apply calcFactorLoadings to all funds in main dataframe
+# Store each in a seperate element in a list
+results_list <- lapply(funds, function(name) {
+    calcFactorLoadings(main_df, name)
+})
+
+
+```
+
+```{r}
+# Combine all dataframes in the list into one big dataframe
+big_dataframe <- do.call(rbind, results_list) %>% 
+    select(Date, Fund, c(1:(ncol(.)-2)))
+```
 
