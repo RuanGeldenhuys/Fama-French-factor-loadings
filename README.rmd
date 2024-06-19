@@ -8,7 +8,7 @@ output:
 
 Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](../code/calcFactorLoadings.R) , while the README serves as a usage guide.
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 
 rm(list = ls()) # Clean your environment
 gc() # garbage collection 
@@ -47,6 +47,23 @@ kable(head(FF_factors), caption = "FF5 factors")
 As can be seen above, fund returns (`main_df`) should be in long format. It requires three columns, namely Date, Fund, Returns. It can have additional columns, since the function will deal with this automatically. The factors (`FF_factors`), require a Date column in the same format as the fund_returns, and then a column for each factor in the analysis. **Note:** The column names are hard-coded into the function. If you have a different naming convention / different factors, you will have to alter them in the function itself.
 
 # How are factor loadings calculated
+
+Factor loadings are calculated based on a 36-month rolling regression given by the equation: 
+
+$$
+R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
+$$ 
+where: 
+- $R_{it}$ is the return of the portfolio or asset $i$ at time $t$, 
+- $R_{ft}$ is the risk-free rate at time $t$, 
+- $R_{Mt}$ is the return of the market portfolio at time $t$, 
+- $\alpha_i$ is the intercept (alpha) for asset $i$, 
+- $\beta_{iM}$ is the sensitivity of the asset's returns to the market risk premium (market beta), 
+- $\beta_{iSMB}$ is the sensitivity of the asset's returns to the size factor (Small Minus Big), 
+- $\beta_{iHML}$ is the sensitivity of the asset's returns to the value factor (High Minus Low), 
+- $\beta_{iRMW}$ is the sensitivity of the asset's returns to the profitability factor (Robust Minus Weak), 
+- $\beta_{iCMA}$ is the sensitivity of the asset's returns to the investment factor (Conservative Minus Aggressive), 
+- $\epsilon_{it}$ is the error term for asset $i$ at time $t$.
 
 # Running the function
 

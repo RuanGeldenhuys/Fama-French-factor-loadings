@@ -7,37 +7,6 @@ creation (however simple) is not well documented in code. The function
 itself is stored [here](../code/calcFactorLoadings.R) , while the README
 serves as a usage guide.
 
-    ##          used (Mb) gc trigger (Mb) max used (Mb)
-    ## Ncells 468183 25.1    1007472 53.9   660385 35.3
-    ## Vcells 865154  6.7    8388608 64.0  1769810 13.6
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-    ## ✔ purrr     1.0.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    ## 
-    ## Attaching package: 'zoo'
-    ## 
-    ## 
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     as.Date, as.Date.numeric
-
-    ## Warning: package 'kableExtra' was built under R version 4.3.3
-
-    ## 
-    ## Attaching package: 'kableExtra'
-    ## 
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     group_rows
-
 # Data
 
 In this example I work with US data. The actual Fama-French factors for
@@ -103,6 +72,25 @@ function. If you have a different naming convention / different factors,
 you will have to alter them in the function itself.
 
 # How are factor loadings calculated
+
+Factor loadings are calculated based on a 36-month rolling regression
+given by the equation:
+
+*R*<sub>*i**t*</sub> − *R*<sub>*f**t*</sub> = *α*<sub>*i*</sub> + *β*<sub>*i**M*</sub>(*R*<sub>*M**t*</sub>−*R*<sub>*f**t*</sub>) + *β*<sub>*i**S**M**B*</sub>SMB<sub>*t*</sub> + *β*<sub>*i**H**M**L*</sub>HML<sub>*t*</sub> + *β*<sub>*i**R**M**W*</sub>RMW<sub>*t*</sub> + *β*<sub>*i**C**M**A*</sub>CMA<sub>*t*</sub> + *ϵ*<sub>*i**t*</sub>
+where: - *R*<sub>*i**t*</sub> is the return of the portfolio or asset
+*i* at time *t*, - *R*<sub>*f**t*</sub> is the risk-free rate at time
+*t*, - *R*<sub>*M**t*</sub> is the return of the market portfolio at
+time *t*, - *α*<sub>*i*</sub> is the intercept (alpha) for asset *i*, -
+*β*<sub>*i**M*</sub> is the sensitivity of the asset’s returns to the
+market risk premium (market beta), - *β*<sub>*i**S**M**B*</sub> is the
+sensitivity of the asset’s returns to the size factor (Small Minus
+Big), - *β*<sub>*i**H**M**L*</sub> is the sensitivity of the asset’s
+returns to the value factor (High Minus Low), -
+*β*<sub>*i**R**M**W*</sub> is the sensitivity of the asset’s returns to
+the profitability factor (Robust Minus Weak), -
+*β*<sub>*i**C**M**A*</sub> is the sensitivity of the asset’s returns to
+the investment factor (Conservative Minus Aggressive), -
+*ϵ*<sub>*i**t*</sub> is the error term for asset *i* at time *t*.
 
 # Running the function
 
