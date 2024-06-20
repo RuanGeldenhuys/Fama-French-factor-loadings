@@ -87,42 +87,62 @@ you will have to alter them in the function itself.
 Factor loadings are calculated based on a 36-month rolling regression
 given by the equation:
 
-<div align="center">
-
-$$
-R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
-$$
-
-</div>
+![R\_{it} - R\_{ft} = \alpha_i + \beta\_{iM} (R\_{Mt} - R\_{ft}) + \beta\_{iSMB} \text{SMB}\_t + \beta\_{iHML} \text{HML}\_t + \beta\_{iRMW} \text{RMW}\_t + \beta\_{iCMA} \text{CMA}\_t + \epsilon\_{it}](https://latex.codecogs.com/png.latex?R_%7Bit%7D%20-%20R_%7Bft%7D%20%3D%20%5Calpha_i%20%2B%20%5Cbeta_%7BiM%7D%20%28R_%7BMt%7D%20-%20R_%7Bft%7D%29%20%2B%20%5Cbeta_%7BiSMB%7D%20%5Ctext%7BSMB%7D_t%20%2B%20%5Cbeta_%7BiHML%7D%20%5Ctext%7BHML%7D_t%20%2B%20%5Cbeta_%7BiRMW%7D%20%5Ctext%7BRMW%7D_t%20%2B%20%5Cbeta_%7BiCMA%7D%20%5Ctext%7BCMA%7D_t%20%2B%20%5Cepsilon_%7Bit%7D "R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}")
 
 where:
 
-- $R_{it}$ is the return of the portfolio or asset $i$ at time $t$,
-- $R_{ft}$ is the risk-free rate at time $t$,
-- $R_{Mt}$ is the return of the market portfolio at time $t$,
-- $\alpha_i$ is the intercept (alpha) for asset $i$,
-- $\beta_{iM}$ is the sensitivity of the asset’s returns to the market
-  risk premium (market beta),
-- $\beta_{iSMB}$ is the sensitivity of the asset’s returns to the size
-  factor (Small Minus Big),
-- $\beta_{iHML}$ is the sensitivity of the asset’s returns to the value
-  factor (High Minus Low),
-- $\beta_{iRMW}$ is the sensitivity of the asset’s returns to the
-  profitability factor (Robust Minus Weak),
-- $\beta_{iCMA}$ is the sensitivity of the asset’s returns to the
-  investment factor (Conservative Minus Aggressive),
-- $\epsilon_{it}$ is the error term for asset $i$ at time $t$.
+- ![R\_{it}](https://latex.codecogs.com/png.latex?R_%7Bit%7D "R_{it}")
+  is the return of the portfolio or asset
+  ![i](https://latex.codecogs.com/png.latex?i "i") at time
+  ![t](https://latex.codecogs.com/png.latex?t "t"),
+- ![R\_{ft}](https://latex.codecogs.com/png.latex?R_%7Bft%7D "R_{ft}")
+  is the risk-free rate at time
+  ![t](https://latex.codecogs.com/png.latex?t "t"),
+- ![R\_{Mt}](https://latex.codecogs.com/png.latex?R_%7BMt%7D "R_{Mt}")
+  is the return of the market portfolio at time
+  ![t](https://latex.codecogs.com/png.latex?t "t"),
+- ![\alpha_i](https://latex.codecogs.com/png.latex?%5Calpha_i "\alpha_i")
+  is the intercept (alpha) for asset
+  ![i](https://latex.codecogs.com/png.latex?i "i"),
+- ![\beta\_{iM}](https://latex.codecogs.com/png.latex?%5Cbeta_%7BiM%7D "\beta_{iM}")
+  is the sensitivity of the asset’s returns to the market risk premium
+  (market beta),
+- ![\beta\_{iSMB}](https://latex.codecogs.com/png.latex?%5Cbeta_%7BiSMB%7D "\beta_{iSMB}")
+  is the sensitivity of the asset’s returns to the size factor (Small
+  Minus Big),
+- ![\beta\_{iHML}](https://latex.codecogs.com/png.latex?%5Cbeta_%7BiHML%7D "\beta_{iHML}")
+  is the sensitivity of the asset’s returns to the value factor (High
+  Minus Low),
+- ![\beta\_{iRMW}](https://latex.codecogs.com/png.latex?%5Cbeta_%7BiRMW%7D "\beta_{iRMW}")
+  is the sensitivity of the asset’s returns to the profitability factor
+  (Robust Minus Weak),
+- ![\beta\_{iCMA}](https://latex.codecogs.com/png.latex?%5Cbeta_%7BiCMA%7D "\beta_{iCMA}")
+  is the sensitivity of the asset’s returns to the investment factor
+  (Conservative Minus Aggressive),
+- ![\epsilon\_{it}](https://latex.codecogs.com/png.latex?%5Cepsilon_%7Bit%7D "\epsilon_{it}")
+  is the error term for asset
+  ![i](https://latex.codecogs.com/png.latex?i "i") at time
+  ![t](https://latex.codecogs.com/png.latex?t "t").
 
 In more practical terms this means the following: Lets say you have
 returns data for a particular fund for 100 periods. You then regress the
-first 36 periods ($t = 1$ to $t = 36$) of returns onto the first 36
-periods of factors. The $\alpha$ and $\beta$’s, as well as their
-standard errors, are the factor loadings for $t=36$ and is then stored.
-Next, you increment one period, now considering $t = 2$ to $t = 37$, and
-the regression is repeated, creating the factor loadings for $t=37$.
-This process is repeated until you get the factor loadings up until
-$t=100$. You have successfully created factor loadings with standard
-errors for **ONE** fund.
+first 36 periods
+(![t = 1](https://latex.codecogs.com/png.latex?t%20%3D%201 "t = 1") to
+![t = 36](https://latex.codecogs.com/png.latex?t%20%3D%2036 "t = 36"))
+of returns onto the first 36 periods of factors. The
+![\alpha](https://latex.codecogs.com/png.latex?%5Calpha "\alpha") and
+![\beta](https://latex.codecogs.com/png.latex?%5Cbeta "\beta")’s, as
+well as their standard errors, are the factor loadings for
+![t=36](https://latex.codecogs.com/png.latex?t%3D36 "t=36") and is then
+stored. Next, you increment one period, now considering
+![t = 2](https://latex.codecogs.com/png.latex?t%20%3D%202 "t = 2") to
+![t = 37](https://latex.codecogs.com/png.latex?t%20%3D%2037 "t = 37"),
+and the regression is repeated, creating the factor loadings for
+![t=37](https://latex.codecogs.com/png.latex?t%3D37 "t=37"). This
+process is repeated until you get the factor loadings up until
+![t=100](https://latex.codecogs.com/png.latex?t%3D100 "t=100"). You have
+successfully created factor loadings with standard errors for **ONE**
+fund.
 
 This entire process is now repeated for every fund you have data for.
 What you are left with is a data frame with the factor loadings for any

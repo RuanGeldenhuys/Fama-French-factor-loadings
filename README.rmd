@@ -1,6 +1,8 @@
 ---
 title: "Fama-French Factor Loadings"
-output: github_document
+output: 
+    github_document:
+        pandoc_args: --webtex
 ---
 
 # Purpose
@@ -19,6 +21,7 @@ library(tidyverse)
 library(readxl)
 library(zoo)
 library(kableExtra)
+library(pandoc)
 
 list.files('code/', full.names = T, recursive = T) %>% .[grepl('.R', .)] %>% as.list() %>% walk(~source(.))
 ```
@@ -53,11 +56,11 @@ As can be seen above, fund returns (`main_df`) should be in long format. It requ
 
 Factor loadings are calculated based on a 36-month rolling regression given by the equation:
 
-<div align="center">
-\[
+
+$$
 R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
-\]
-</div>
+$$
+
 
 
 where:
