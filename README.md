@@ -8,7 +8,8 @@ Fama-French 5 Factor loadings on multiple funds simultaneously. These
 factor loadings are often used within financial modelling, but their
 creation (however simple) is not well documented in code. The function
 itself is stored [here](code/calcFactorLoadings.R) , while the README
-serves as an explanation and usage guide.
+serves as an explanation and usage guide. A Python implementation can
+found [here](code/calcFactorLoadings.py).
 
 This is not a guide on calculating the Fama-French factors themselves.
 That can be found
@@ -87,7 +88,7 @@ you will have to alter them in the function itself.
 Factor loadings are calculated based on a 36-month rolling regression
 given by the equation:
 
-![R\_{it} - R\_{ft} = \alpha_i + \beta\_{iM} (R\_{Mt} - R\_{ft}) + \beta\_{iSMB} \text{SMB}\_t + \beta\_{iHML} \text{HML}\_t + \beta\_{iRMW} \text{RMW}\_t + \beta\_{iCMA} \text{CMA}\_t + \epsilon\_{it}](https://latex.codecogs.com/png.latex?R_%7Bit%7D%20-%20R_%7Bft%7D%20%3D%20%5Calpha_i%20%2B%20%5Cbeta_%7BiM%7D%20%28R_%7BMt%7D%20-%20R_%7Bft%7D%29%20%2B%20%5Cbeta_%7BiSMB%7D%20%5Ctext%7BSMB%7D_t%20%2B%20%5Cbeta_%7BiHML%7D%20%5Ctext%7BHML%7D_t%20%2B%20%5Cbeta_%7BiRMW%7D%20%5Ctext%7BRMW%7D_t%20%2B%20%5Cbeta_%7BiCMA%7D%20%5Ctext%7BCMA%7D_t%20%2B%20%5Cepsilon_%7Bit%7D "R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}")
+![](bin/FF.png)
 
 where:
 

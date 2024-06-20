@@ -7,7 +7,7 @@ output:
 
 # Purpose
 
-Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](code/calcFactorLoadings.R) , while the README serves as an explanation and usage guide.
+Here is a function and supplementary code I wrote to calculate Fama-French 5 Factor loadings on multiple funds simultaneously. These factor loadings are often used within financial modelling, but their creation (however simple) is not well documented in code. The function itself is stored [here](code/calcFactorLoadings.R) , while the README serves as an explanation and usage guide. A Python implementation can found [here](code/calcFactorLoadings.py).
 
 This is not a guide on calculating the Fama-French factors themselves. That can be found [here](https://stablebread.com/how-to-calculate-and-interpret-the-fama-and-french-and-carhart-multifactor-models/). Be warned, this is a very data intensive process and will likely require access to a paid data platform, like the Bloomberg terminal.
 
@@ -56,12 +56,7 @@ As can be seen above, fund returns (`main_df`) should be in long format. It requ
 
 Factor loadings are calculated based on a 36-month rolling regression given by the equation:
 
-
-$$
-R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
-$$
-
-
+![](bin/FF.png)
 
 where:
 
