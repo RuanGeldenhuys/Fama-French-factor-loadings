@@ -16,6 +16,8 @@ That can be found
 Be warned, this is a very data intensive process and will likely require
 access to a paid data platform, like the Bloomberg terminal.
 
+The libraries used are: `tidyverse`, `zoo`, `readxl` and `kableExtra`.
+
 # Data
 
 In this example I work with US data. The actual Fama-French factors for
@@ -85,9 +87,13 @@ you will have to alter them in the function itself.
 Factor loadings are calculated based on a 36-month rolling regression
 given by the equation:
 
+<div align="center">
+
 $$
 R_{it} - R_{ft} = \alpha_i + \beta_{iM} (R_{Mt} - R_{ft}) + \beta_{iSMB} \text{SMB}_t + \beta_{iHML} \text{HML}_t + \beta_{iRMW} \text{RMW}_t + \beta_{iCMA} \text{CMA}_t + \epsilon_{it}
 $$
+
+</div>
 
 where:
 
