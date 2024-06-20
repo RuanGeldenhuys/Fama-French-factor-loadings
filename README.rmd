@@ -1,8 +1,6 @@
 ---
 title: "Fama-French Factor Loadings"
-output: 
-    github_document:
-        pandoc_args: --webtex
+output: github_document
 ---
 
 # Purpose
