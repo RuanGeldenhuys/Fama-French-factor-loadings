@@ -100,3 +100,7 @@ kable(head(factor_loadings))
 ```
 
 And there you have it. A dataframe with factor loadings for all funds in the data. Happy modelling.
+
+
+
+
